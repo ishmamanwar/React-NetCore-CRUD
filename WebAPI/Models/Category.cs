@@ -10,7 +10,7 @@ namespace WebAPI.Models
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
 
-        public bool Active { get; set; } = true;
+        public int Active { get; set; } = 1;
 
         public string CategoryDescription { get; set; }
 

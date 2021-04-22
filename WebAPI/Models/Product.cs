@@ -11,6 +11,6 @@ namespace WebAPI.Models
         public string ProductName { get; set; }
         public string Category { get; set; }
         public string ProductDescription { get; set; }
-        public bool Active { get; set; } = true;
+        public int Active { get; set; } = 1;
     }
 }

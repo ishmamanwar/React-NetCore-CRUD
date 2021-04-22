@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
+using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
@@ -43,6 +44,33 @@ namespace WebAPI.Controllers
             }
 
             return new JsonResult(table);
+        }
+
+        [HttpPost]
+        public JsonResult Post(Category cat)
+        {
+            string query = @"
+                     insert into dbo.Category values
+                     ( '"+cat.CategoryName+@"',
+                      '"+cat.Active+@"',
+                      '"+cat.CategoryDescription+@"')";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("ProductAppCon");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Added Successfully");
         }
     }
 }
