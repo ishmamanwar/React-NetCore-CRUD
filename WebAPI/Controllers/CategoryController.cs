@@ -72,5 +72,34 @@ namespace WebAPI.Controllers
 
             return new JsonResult("Added Successfully");
         }
+        [HttpPut]
+        public JsonResult Put(Category cat)
+        {
+            string query = @"
+                     update dbo.Category set
+                     CategoryName = '" + cat.CategoryName + @"',
+                      Active = '" + cat.Active + @"',
+                      CategoryDescription = '" + cat.CategoryDescription + @"'
+                      where CategoryId = "+cat.CategoryId+ @"
+                     ";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("ProductAppCon");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Updated Successfully");
+        }
+
     }
 }
