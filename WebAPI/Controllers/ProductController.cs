@@ -129,5 +129,29 @@ namespace WebAPI.Controllers
 
             return new JsonResult("Deleted Successfully");
         }
+
+        [Route("GetAllCategoryNames")]
+        public JsonResult GetCategoryNames()
+        {
+            string query = @"
+                     select CategoryName from dbo.Category where Active = 1";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("ProductAppCon");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
     }
 }
