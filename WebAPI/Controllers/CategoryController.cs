@@ -50,7 +50,9 @@ namespace WebAPI.Controllers
         public JsonResult Post(Category cat)
         {
             string query = @"
-                     insert into dbo.Category values
+                     insert into dbo.Category 
+                    (CategoryName,Active,CategoryDescription)
+                    values
                      ( '"+cat.CategoryName+@"',
                       '"+cat.Active+@"',
                       '"+cat.CategoryDescription+@"')";
