@@ -45,6 +45,31 @@ namespace WebAPI.Controllers
 
             return new JsonResult(table);
         }
+        [Route("Search/{CategoryName}")]
+        public JsonResult Search(string CategoryName)
+        {
+            string query = @"
+                     select * from dbo.Category
+                     where CategoryName like '%" + CategoryName + @"%'";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("ProductAppCon");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+
 
         [HttpPost]
         public JsonResult Post(Category cat)
